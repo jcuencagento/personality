@@ -1,12 +1,12 @@
 import { sql } from '@vercel/postgres';
 import {
-  CustomerField,
-  CustomersTable,
-  InvoiceForm,
-  InvoicesTable,
-  LatestInvoiceRaw,
-  User,
-  Revenue,
+    CustomerField,
+    FilmsTable,
+    InvoiceForm,
+    InvoicesTable,
+    LatestInvoiceRaw,
+    User,
+    Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -14,23 +14,23 @@ import { unstable_noStore as noStore } from 'next/cache';
 export async function fetchRevenue() {
   // Add noStore() here prevent the response from being cached.
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
-  noStore();
-  try {
-    // Artificially delay a reponse for demo purposes.
-    // Don't do this in real life :)
+    noStore();
+    try {
+        // Artificially delay a reponse for demo purposes.
+        // Don't do this in real life :)
 
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+        // console.log('Fetching revenue data...');
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    const data = await sql<Revenue>`SELECT * FROM revenue`;
+        const data = await sql<Revenue>`SELECT * FROM revenue`;
 
-    // console.log('Data fetch complete after 3 seconds.');
+        // console.log('Data fetch complete after 3 seconds.');
 
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
-  }
+        return data.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch revenue data.');
+    }
 }
 
 export async function fetchLatestInvoices() {
@@ -193,6 +193,7 @@ export async function fetchCustomers() {
   }
 }
 
+/*
 export async function fetchFilteredCustomers(query: string) {
   noStore();
   try {
@@ -226,6 +227,7 @@ export async function fetchFilteredCustomers(query: string) {
     throw new Error('Failed to fetch customer table.');
   }
 }
+*/
 
 export async function getUser(email: string) {
   try {
@@ -235,4 +237,26 @@ export async function getUser(email: string) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
+}
+
+export async function getFilms(query: any) {
+    const apiKey = '8d30a0b229ea5c741cccef3304393f72';
+    const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&sort_by=vote_average.desc&vote_count.gte=1000&language=en-US&page=1&include_adult=false&include_video=false`;
+
+    console.log(query); //Not used yet
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        const films = data.results.slice(0, 10); // Get the top 10 films
+
+        console.log(films);
+        return films;
+    } catch (error) {
+        console.error('Error fetching films:', error);
+        return [];
+    }
 }

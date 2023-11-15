@@ -1,11 +1,11 @@
-import Form from '@/app/ui/invoices/edit-form';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
+import Form from '@/app/ui/sports/edit-form';
+import Breadcrumbs from '@/app/ui/sports/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Edit Invoice',
+  title: 'Edit Sports',
 };
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -23,10 +23,10 @@ export default async function Page({ params }: { params: { id: string } }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Invoices', href: '/dashboard/invoices' },
+          { label: 'Sports', href: '/dashboard/sports' },
           {
             label: 'Edit Invoice',
-            href: `/dashboard/invoices/${id}/edit`,
+            href: `/dashboard/sports/${id}/edit`,
             active: true,
           },
         ]}

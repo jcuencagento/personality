@@ -16,6 +16,16 @@ export type Customer = {
   image_url: string;
 };
 
+/* IMDB or similar */
+export type Film = {
+    id: string;
+    image_url: string;
+    title: string;
+    director: string;
+    year: number;
+    money: number;
+};
+
 export type Invoice = {
   id: string;
   customer_id: string;
@@ -73,6 +83,14 @@ export type FormattedCustomersTable = {
   total_invoices: number;
   total_pending: string;
   total_paid: string;
+};
+
+export type FilmsTable = {
+    id: string;
+    poster_path: string;
+    title: string;
+    release_date: string;
+    vote_average: string;
 };
 
 export type CustomerField = {
