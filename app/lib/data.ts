@@ -1,7 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
     CustomerField,
-    FilmsTable,
     InvoiceForm,
     InvoicesTable,
     LatestInvoiceRaw,
@@ -10,6 +9,9 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 export async function fetchRevenue() {
   // Add noStore() here prevent the response from being cached.
@@ -253,10 +255,84 @@ export async function getFilms(query: any) {
         const data = await response.json();
         const films = data.results.slice(0, 10); // Get the top 10 films
 
-        console.log(films);
+        //console.log(films);
         return films;
     } catch (error) {
         console.error('Error fetching films:', error);
         return [];
+    }
+}
+
+async function getAccessToken() {
+    const client_id = process.env.SPOTIFY_CLIENT_ID;
+    const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+
+    const basicAuth = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
+    const tokenEndpoint = 'https://accounts.spotify.com/api/token';
+
+    try {
+        const response = await fetch(tokenEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Basic ${basicAuth}`,
+            },
+            body: 'grant_type=client_credentials',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch access token');
+        }
+
+        const data = await response.json();
+        const accessToken = data.access_token;
+
+        return accessToken;
+    } catch (error) {
+        console.error('Error fetching access token:', error);
+        return null;
+    }
+}
+
+// Function to fetch songs using the access token
+async function getSongs(accessToken: string) {
+    const apiUrl = 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap'; // Replace with your desired endpoint
+
+    try {
+        const response = await fetch(apiUrl, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        console.log({ data });
+        const songs = data.tracks;
+        return songs;
+    } catch (error) {
+        console.error('Error fetching songs:', error);
+        return [];
+    }
+}
+
+export async function fetchSongs() {
+    try {
+        const accessToken = await getAccessToken();
+
+        if (!accessToken) {
+            console.error('Failed to obtain access token');
+            return;
+        }
+
+        // Now use the access token to make requests to the Spotify API
+        const songs = await getSongs(accessToken);
+        console.log(songs);
+        return songs;
+    } catch (error) {
+        console.error('Error fetching songs:', error);
     }
 }

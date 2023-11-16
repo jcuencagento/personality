@@ -1,25 +1,16 @@
-import { getFilms } from '@/app/lib/data';
-import FilmsTable from '@/app/ui/films/table';
+import { fetchSongs } from '@/app/lib/data';
+import SongsTable from '@/app/ui/music/table';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Films',
+  title: 'Songs',
 };
 
-export default async function Page({
-    searchParams,
-}: {
-    searchParams?: {
-        query?: string;
-        page?: string;
-    };
-}) {
-    const query = searchParams?.query || '';
-    const films = await getFilms(query);
-
+export default async function Page({ }: { }) {
+    const songs = await fetchSongs();
     return (
         <main>
-            <FilmsTable films={films} />
+            <SongsTable songs={songs} />
         </main>
     );
 }

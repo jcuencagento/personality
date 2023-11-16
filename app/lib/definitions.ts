@@ -16,6 +16,8 @@ export type Customer = {
   image_url: string;
 };
 
+
+
 /* IMDB or similar */
 export type Film = {
     id: string;
@@ -25,6 +27,43 @@ export type Film = {
     year: number;
     money: number;
 };
+
+
+
+/*  Spotify */
+export type Song = {
+  id: string;
+  name: string;
+  album: Album;
+  artists: Array<Artist>;
+  popularity: number;
+  explicit: boolean;
+};
+
+type Album = {
+  name: string,
+  images: Array<AlbumImages>,
+  external_urls: ExternalURLs
+}
+
+type AlbumImages = {
+  url: string,
+  height: number,
+  width: number
+}
+
+type Artist = {
+  name: string,
+  external_urls: ExternalURLs
+}
+
+type ExternalURLs = {
+  spotify: string
+}
+
+
+
+
 
 export type Invoice = {
   id: string;
