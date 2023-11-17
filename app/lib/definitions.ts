@@ -34,6 +34,7 @@ export type Film = {
 export type Song = {
   id: string;
   name: string;
+  preview_url: string;
   album: Album;
   artists: Array<Artist>;
   popularity: number;

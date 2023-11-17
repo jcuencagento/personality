@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
 import { Song } from '@/app/lib/definitions';
+import dynamic from 'next/dynamic';
+import SongComponent from './song-component';
 
 export default async function SongsTable({
     songs,
@@ -48,12 +50,12 @@ export default async function SongsTable({
                         <div className="flex w-1/2 flex-col">
                             <p className="text-xs">Album</p>
                             <a href={song.album.external_urls.spotify} target="_blank" rel="noopener noreferrer">
-                                <p className="font-medium">{song.album.name}</p>
+                                <p className="font-big">{song.album.name}</p>
                             </a>
                         </div>
                         <div className="flex w-1/2 flex-col">
                             <p className="text-xs">Popularity</p>
-                            <p className="font-medium">{song.popularity}</p>
+                            <p className="font-big">{song.popularity}</p>
                         </div>
                         </div>
                         <div className="pt-4 text-sm">
@@ -65,19 +67,19 @@ export default async function SongsTable({
                 <table className="hidden min-w-full rounded-md text-gray-900 md:table">
                     <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
                     <tr>
-                        <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                        <th scope="col" className="px-4 py-5 font-big sm:pl-6">
                         Song
                         </th>
-                        <th scope="col" className="px-3 py-5 font-medium">
+                        <th scope="col" className="px-3 py-5 font-big">
                         Artist
                         </th>
-                        <th scope="col" className="px-3 py-5 font-medium">
+                        <th scope="col" className="px-3 py-5 font-big">
                         Album
                         </th>
-                        <th scope="col" className="px-3 py-5 font-medium">
+                        <th scope="col" className="px-3 py-5 font-big">
                         Popularity
                         </th>
-                        <th scope="col" className="px-4 py-5 font-medium">
+                        <th scope="col" className="px-4 py-5 font-big">
                         Explicit
                         </th>
                     </tr>
@@ -87,27 +89,23 @@ export default async function SongsTable({
                     {songs.map((song) => (
                         <tr key={song.id} className="group">
                         <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
-                            <div className="flex items-center gap-3">
-                            <Image
-                                src={song.album.images[0].url}
-                                alt={`${song.name}'s picture`}
-                                width={80}
-                                height={80}
-                            />
-                            <p>{song.name}</p>
-                            </div>
+                        <SongComponent song={song} />
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                            {song.artists[0].name}
+                            <a href={song.artists[0].external_urls.spotify} target="_blank" rel="noopener noreferrer">
+                                <p className="font-bold text-lg">{song.artists[0].name}</p>
+                            </a>
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                            {song.album.name}
+                            <a href={song.album.external_urls.spotify} target="_blank" rel="noopener noreferrer">
+                                <p className="font-bold text-lg">{song.album.name}</p>
+                            </a>
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                            {song.popularity}
+                            <p className="font-bold text-lg">{song.popularity} <span role="img" aria-label="star">⭐</span></p>
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                            {song.explicit}
+                            <p className="font-bold text-lg">{song.explicit ? <span role="img" aria-label="no">🔞</span> : <span role="img" aria-label="ok">🆗</span>}</p>
                         </td>
                         </tr>
                     ))}
