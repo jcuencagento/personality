@@ -336,28 +336,38 @@ export async function fetchSongs() {
     }
 }
 
-export async function fetchStandings(conference: string) {
-    
-    const apiUrl = `https://api-nba-v1.p.rapidapi.com/standings?league=standard&season=2023&conference=${conference}`;
+type PlayerURLDictionary = {
+    [playerName: string]: string;
+};
+  
+const playerURLs: PlayerURLDictionary = {
+    haliburton: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547245',
+    turner: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=452',
+    lebron: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=237',
+    ant: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547238',
+    shai: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=175',
+    nesmith: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547250'
+    // Add more players and their URLs here
+};
+
+export async function fetchAverages(player: string) {
+    const URL = playerURLs[player] 
+        ? playerURLs[player] 
+        : 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=304' //TJ
     try {
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': process.env.NBA_RAPIDAPI_KEY,
-                'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
-            }
+        const response = await fetch(URL, {
+            method: 'GET'
         });
         
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }
 
-        const data = await response.text();
-        console.log({ data });
-        const songs = data;
-        return songs;
+        const data = await response.json();
+        const averages = data.data[0];
+        return averages;
     } catch (error) {
-        console.error('Error fetching songs:', error);
+        console.error('Error fetching averages:', error);
         return [];
     }
 }
