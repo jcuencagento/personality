@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
 import { Song } from '@/app/lib/definitions';
-import dynamic from 'next/dynamic';
 import SongComponent from './song-component';
 
 export default async function SongsTable({
@@ -86,7 +85,7 @@ export default async function SongsTable({
                     </thead>
 
                     <tbody className="divide-y divide-gray-200 text-gray-900">
-                    {songs.map((song) => (
+                    {songs?.map((song) => (
                         <tr key={song.id} className="group">
                         <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <SongComponent song={song} />

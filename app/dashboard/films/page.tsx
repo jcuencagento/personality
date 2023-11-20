@@ -1,4 +1,4 @@
-import { getFilms } from '@/app/lib/data';
+import { getFilms, fetchStandings } from '@/app/lib/data';
 import FilmsTable from '@/app/ui/films/table';
 import { Metadata } from 'next';
 
@@ -16,6 +16,7 @@ export default async function Page({
 }) {
     const query = searchParams?.query || '';
     const films = await getFilms(query);
+    const standings_east = await fetchStandings('east');
 
     return (
         <main>

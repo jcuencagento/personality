@@ -296,13 +296,13 @@ async function getAccessToken() {
 
 // Function to fetch songs using the access token
 async function getSongs(accessToken: string) {
-    const apiUrl = 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap'; // Replace with your desired endpoint
+    const apiUrl = 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap';
 
     try {
         const response = await fetch(apiUrl, {
             headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+                Authorization: `Bearer ${accessToken}`
+            }
         });
 
         if (!response.ok) {
@@ -328,11 +328,36 @@ export async function fetchSongs() {
             return;
         }
 
-        // Now use the access token to make requests to the Spotify API
         const songs = await getSongs(accessToken);
         console.log(songs);
         return songs;
     } catch (error) {
         console.error('Error fetching songs:', error);
+    }
+}
+
+export async function fetchStandings(conference: string) {
+    
+    const apiUrl = `https://api-nba-v1.p.rapidapi.com/standings?league=standard&season=2023&conference=${conference}`;
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': process.env.NBA_RAPIDAPI_KEY,
+                'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.text();
+        console.log({ data });
+        const songs = data;
+        return songs;
+    } catch (error) {
+        console.error('Error fetching songs:', error);
+        return [];
     }
 }
