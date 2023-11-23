@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { player: string } }) {
                     alt={player}
                     width={1000}
                     height={1000}
-                    quality={90}
+                    quality={100}
                     className="player-image-personal"
                 />
                 <h2>{player}</h2>
