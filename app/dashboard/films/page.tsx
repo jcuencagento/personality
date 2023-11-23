@@ -1,4 +1,4 @@
-import { getFilms, fetchAverages } from '@/app/lib/data';
+import { getFilms } from '@/app/lib/data';
 import FilmsTable from '@/app/ui/films/table';
 import { Metadata } from 'next';
 
@@ -16,11 +16,8 @@ export default async function Page({
 }) {
     const query = searchParams?.query || '';
     const films = await getFilms(query);
-    const haliburton_averages = await fetchAverages('haliburton');
-    console.log(haliburton_averages);
     return (
         <main>
-            <p>{haliburton_averages.games_played}</p>
             <FilmsTable films={films} />
         </main>
     );
