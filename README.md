@@ -1,5 +1,8 @@
-## Next.js App Router Course - Final
+## Personality Next.JS React and Typescript project
 
-This is the final template for the Next.js App Router Course. It contains the final code for the dashboard application.
+ - Cinema and Shows
+ - Music and Podcasts
+ - Sports as NBA
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
+
+Javier Cuenca Gento
