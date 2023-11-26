@@ -346,14 +346,20 @@ const playerURLs: PlayerURLDictionary = {
     lebron: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=237',
     ant: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547238',
     shai: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=175',
-    nesmith: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547250'
+    nesmith: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547250',
+    antetokounmpo: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=15',
+    george: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=172',
+    jokic: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=246',
+    tatum: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=434',
+    durant: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=140',
+    steph: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=115',
     // Add more players and their URLs here
 };
 
 export async function fetchAverages(player: string) {
     const URL = playerURLs[player] 
         ? playerURLs[player] 
-        : 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=304' //TJ
+        : 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=304' // TJ xd
     try {
         const response = await fetch(URL, {
             method: 'GET'

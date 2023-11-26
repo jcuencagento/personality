@@ -9,6 +9,12 @@ export default function Page({ }: { }) {
         { name: 'haliburton' },
         { name: 'turner' },
         { name: 'shai' },
+        { name: 'jokic' },
+        { name: 'tatum' },
+        { name: 'george' },
+        { name: 'antetokounmpo' },
+        { name: 'durant' },
+        { name: 'steph' },
         { name: 'nesmith' }
     ];
 
