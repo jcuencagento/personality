@@ -1,0 +1,27 @@
+.player-grid-dash {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    gap: 5%;
+}
+  
+.player-card-dash {
+    flex: 1;
+    width: 37vh;
+    height: 21vh;
+    border: 2px solid rgb(248, 229, 166);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+  
+.player-card-dash:hover {
+    transform: scale(1.03);
+}
+  
+.player-image-dash {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+  

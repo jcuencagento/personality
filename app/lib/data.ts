@@ -294,10 +294,22 @@ async function getAccessToken() {
     }
 }
 
-// Function to fetch songs using the access token
-async function getSongs(accessToken: string) {
-    const apiUrl = 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap';
+type Record = {
+    [playerName: string]: string;
+};
 
+const recommendationsURLs: Record = {
+    nirvana_rock_metal_punk_rap: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap',
+    nirvana_pop_punk_reggae: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=pop%2Cpunk%2Creggae',
+    nirvana_rap_metal_punk: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rap%2Cpunk%2Cmetal'
+};
+
+async function getSongs(accessToken: string) {
+    const keys = Object.keys(recommendationsURLs);
+    const randomKeyIndex = Math.floor(Math.random() * keys.length);
+    const randomKey = keys[randomKeyIndex];
+    const apiUrl = recommendationsURLs[randomKey];
+    console.log(apiUrl);
     try {
         const response = await fetch(apiUrl, {
             headers: {

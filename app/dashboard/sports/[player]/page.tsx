@@ -20,7 +20,10 @@ export default async function Page({ params }: { params: { player: string } }) {
 
      return (
         <div className="player-page">
-            <Link key={player} href="/dashboard/sports" className="back-button">Back...</Link>
+            <div className='flex items-center gap-3'>
+                <Link key={`${player}-home`} href="/dashboard" className="home-button">Go home...</Link>
+                <Link key={`${player}-players`} href="/dashboard/sports" className="players-button">NBA players...</Link>
+            </div>
             <div className="card">
                 <div className="player-info">
                     <p className="player-name">{player}</p>

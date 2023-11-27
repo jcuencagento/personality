@@ -47,7 +47,7 @@
     text-align: center; /* Center align text */
 }
 
-.back-button {
+.home-button {
     display: inline-block;
     padding: 10px 20px;
     margin-bottom: 20px;
@@ -59,7 +59,23 @@
     transition: background-color 0.3s ease;
 }
 
-.back-button:hover {
+.home-button:hover {
+    background-color: #555;
+}
+
+.players-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #333;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.players-button:hover {
     background-color: #555;
 }
 
