@@ -279,7 +279,6 @@ export async function getToWatch() {
 
         const data = await response.json();
         const films = data.results.slice(0, 4); // Get the 4 films TO WATCH
-        console.log({ films });
         return films;
     } catch (error) {
         console.error('Error fetching films:', error);
@@ -292,6 +291,9 @@ async function getAccessToken() {
     const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
     const basicAuth = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
+    const requestBody = new URLSearchParams();
+    requestBody.append('grant_type', 'client_credentials');
+    requestBody.append('scope', 'user-read-private user-read-email user-library-read');
     const tokenEndpoint = 'https://accounts.spotify.com/api/token';
 
     try {
@@ -301,7 +303,7 @@ async function getAccessToken() {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': `Basic ${basicAuth}`,
             },
-            body: 'grant_type=client_credentials',
+            body: requestBody.toString()
         });
 
         if (!response.ok) {
@@ -309,9 +311,9 @@ async function getAccessToken() {
         }
 
         const data = await response.json();
-        const accessToken = data.access_token;
-
-        return accessToken;
+        console.log({ data });
+        const now_object = { now: Date.now() };
+        return { ...data, ...now_object };
     } catch (error) {
         console.error('Error fetching access token:', error);
         return null;
@@ -324,11 +326,11 @@ type Record = {
 
 const recommendationsURLs: Record = {
     nirvana_rock_metal_punk_rap: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap',
-    //nirvana_pop_punk_reggae: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=pop%2Cpunk%2Creggae',
+    blink_metal_pop: 'https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_artists=6FBDaR13swtiWwGhX1WQsP&seed_genres=metal%2Cpop',
     //nirvana_rap_metal_punk: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rap%2Cpunk%2Cmetal'
 };
 
-async function getSongs(accessToken: string) {
+async function getSongs(token: Token | null) {
     const keys = Object.keys(recommendationsURLs);
     const randomKeyIndex = Math.floor(Math.random() * keys.length);
     const randomKey = keys[randomKeyIndex];
@@ -337,11 +339,12 @@ async function getSongs(accessToken: string) {
     try {
         const response = await fetch(apiUrl, {
             headers: {
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${token?.access_token}`
             }
         });
 
         if (!response.ok) {
+            console.log({ response });
             throw new Error('Failed to fetch data');
         }
 
@@ -349,25 +352,49 @@ async function getSongs(accessToken: string) {
         const songs = data.tracks;
         return songs;
     } catch (error) {
+        console.log(error);
         console.error('Error fetching songs:', error);
         return [];
     }
 }
 
+type Token = {
+    access_token: string,
+    token_type: string,
+    expires_in: number,
+    now: number
+}
+
+let access_token_object: Token | null;
 export async function fetchSongs() {
+    if (!access_token_object || isTokenExpired(access_token_object)) {
+        access_token_object = await getAccessToken(); // Retrieve a new access token
+    }
+
+    console.log(access_token_object);
     try {
-        const accessToken = await getAccessToken();
-
-        if (!accessToken) {
-            console.error('Failed to obtain access token');
-            return;
-        }
-
-        const songs = await getSongs(accessToken);
+        const songs = await getSongs(access_token_object);
         return songs;
     } catch (error) {
         console.error('Error fetching songs:', error);
     }
+}
+
+
+function isTokenExpired(token: Token) {
+    if (!token) {
+        return true;
+    }
+
+    if (!token.access_token || !token.expires_in) {
+        return true;
+    }
+
+    const expiration_time = token.now + token.expires_in;
+    console.log('Expiration time', expiration_time);
+    console.log('Date now', Date.now());
+    console.log(expiration_time < Date.now());
+    return expiration_time < Date.now();
 }
 
 type PlayerURLDictionary = {
