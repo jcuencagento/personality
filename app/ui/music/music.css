@@ -1,0 +1,9 @@
+.audio:hover {
+    transform: scale(1.005); /* Scale up on hover */
+    transition: transform 0.3s ease-in-out; /* Add a smooth transition */
+
+}
+
+.audio:hover .try {
+    color: rgb(255, 229, 81); /* Change text color to yellow on hover */
+  }

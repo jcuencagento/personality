@@ -244,7 +244,7 @@ export async function getUser(email: string) {
 export async function getFilms(query: any) {
     const apiKey = '8d30a0b229ea5c741cccef3304393f72';
     const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&sort_by=vote_average.desc&vote_count.gte=1000&language=en-US&page=1&include_adult=false&include_video=false`;
-
+    https://api.themoviedb.org/3/account/20706337/watchlist/movies?language=en-US&page=1&sort_by=created_at.asc
     console.log(query); //Not used yet
     try {
         const response = await fetch(apiUrl);
@@ -256,6 +256,30 @@ export async function getFilms(query: any) {
         const films = data.results.slice(0, 10); // Get the top 10 films
 
         //console.log(films);
+        return films;
+    } catch (error) {
+        console.error('Error fetching films:', error);
+        return [];
+    }
+}
+
+export async function getToWatch() {
+    const apiUrl = `https://api.themoviedb.org/3/account/20706337/watchlist/movies?language=en-US&page=1&sort_by=created_at.desc`;
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZDMwYTBiMjI5ZWE1Yzc0MWNjY2VmMzMwNDM5M2Y3MiIsInN1YiI6IjY1NTQwNWZiOTAzYzUyMDBlMWYwMTdlYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NGfKWQMflqkXDcJ58Vg9C0l1wqiSsEIfQTlP-_bYws4'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        const films = data.results.slice(0, 4); // Get the 4 films TO WATCH
+        console.log({ films });
         return films;
     } catch (error) {
         console.error('Error fetching films:', error);
@@ -300,8 +324,8 @@ type Record = {
 
 const recommendationsURLs: Record = {
     nirvana_rock_metal_punk_rap: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap',
-    nirvana_pop_punk_reggae: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=pop%2Cpunk%2Creggae',
-    nirvana_rap_metal_punk: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rap%2Cpunk%2Cmetal'
+    //nirvana_pop_punk_reggae: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=pop%2Cpunk%2Creggae',
+    //nirvana_rap_metal_punk: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rap%2Cpunk%2Cmetal'
 };
 
 async function getSongs(accessToken: string) {
@@ -322,7 +346,6 @@ async function getSongs(accessToken: string) {
         }
 
         const data = await response.json();
-        console.log({ data });
         const songs = data.tracks;
         return songs;
     } catch (error) {
@@ -341,7 +364,6 @@ export async function fetchSongs() {
         }
 
         const songs = await getSongs(accessToken);
-        console.log(songs);
         return songs;
     } catch (error) {
         console.error('Error fetching songs:', error);

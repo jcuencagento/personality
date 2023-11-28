@@ -19,7 +19,7 @@ export default function Page({ }: { }) {
     ];
 
     return (
-        <div className="sports-page">
+        <div className="sports-page overflow-scroll">
             {players.map((player, index) => (
                 <Link key={index} href={`/dashboard/sports/${player.name}`}>
                 <div className="player-card" >

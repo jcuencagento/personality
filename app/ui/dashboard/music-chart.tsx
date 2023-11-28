@@ -1,55 +1,28 @@
-import { generateYAxis } from '@/app/lib/utils';
-import { CalendarIcon } from '@heroicons/react/24/outline';
 import { montserrat } from '@/app/ui/fonts';
-import { fetchMusic } from '@/app/lib/data';
+import { fetchSongs } from '@/app/lib/data';
+import { Song } from '@/app/lib/definitions';
+import SongComponent from '../music/song-component';
 
-export default async function RevenueChart() {
-    const revenue = await fetchRevenue();
+export default async function MusicChart() {
+    const songs: Song[] = await fetchSongs();
 
-    const chartHeight = 320;
-    const { yAxisLabels, topLabel } = generateYAxis(revenue);
-
-    if (!revenue || revenue.length === 0) {
+    if (!songs || songs.length === 0) {
         return <p className="mt-4 text-gray-400">No data available.</p>;
     }
 
     return (
         <div className="w-full md:col-span-4">
-            <h2 className={`${montserrat.className} mb-4 text-xl md:text-2xl`}>
-                Try out this music...
+            <h2 className={`${montserrat.className} mb-1 md:text-xl`}>
+                Try out todays recommendations...
             </h2>
-            <div className="rounded-xl bg-gray-50 p-4">
-                <div className="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
-                {/* y-axis */}
-                <div
-                    className="mb-6 hidden flex-col justify-between text-sm text-gray-400 sm:flex"
-                    style={{ height: `${chartHeight}px` }}
-                >
-                    {yAxisLabels.map((label) => (
-                    <p key={label}>{label}</p>
-                    ))}
-                </div>
-
-                {revenue.map((month) => (
-                    <div key={month.month} className="flex flex-col items-center gap-2">
-                    {/* bars */}
+            <div className="rounded-xl bg-yellow-50 p-4">
+                {songs?.filter((song) => song.preview_url).slice(0, 4).map((song) => (
                     <div
-                        className="w-full rounded-md bg-blue-300"
-                        style={{
-                        height: `${(chartHeight / topLabel) * month.revenue}px`,
-                        }}
-                    ></div>
-                    {/* x-axis */}
-                    <p className="-rotate-90 text-sm text-gray-400 sm:rotate-0">
-                        {month.month}
-                    </p>
+                        key={song.id}
+                        className="mb-2 w-full rounded-md text-black bg-gray-500 p-4">
+                        <SongComponent song={song} />
                     </div>
                 ))}
-                </div>
-                <div className="flex items-center pb-2 pt-6">
-                <CalendarIcon className="h-5 w-5 text-gray-500" />
-                <h3 className="ml-2 text-sm text-gray-500 ">Last 12 months</h3>
-                </div>
             </div>
         </div>
     );

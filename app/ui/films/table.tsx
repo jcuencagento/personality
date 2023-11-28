@@ -30,7 +30,6 @@ export default async function FilmsTable({
                             <div className="flex items-center gap-3">
                                 <Image
                                 src={`https://image.tmdb.org/t/p/original/${film.poster_path}`}
-                                className="rounded-full"
                                 alt={`${film.title}'s picture`}
                                 width={50}
                                 height={50}

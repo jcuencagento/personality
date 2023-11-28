@@ -3,6 +3,7 @@
 import React, { useState} from 'react';
 import Image from 'next/image';
 import { Song } from '@/app/lib/definitions'; 
+import './music.css'
 
 interface SongComponentProps {
     song: Song;
@@ -31,8 +32,9 @@ const SongComponent: React.FC<SongComponentProps> = ({ song }) => {
 
     return (
         <div
-            className="flex items-center gap-3"
-            onClick={!isPlaying ? handlePlayPreview : handleStopPreview }>
+            className="audio flex items-center gap-3"
+            onClick={!isPlaying ? handlePlayPreview : handleStopPreview }
+            style={{ cursor: 'pointer' }}>
             <Image
                 src={song.album.images[0].url}
                 alt={`${song.name}'s picture`}
@@ -43,7 +45,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ song }) => {
                 <p className="font-bold text-lg">
                     {song.name}
                 </p>
-                <p className="font-italic text-medium">
+                <p className="try font-italic text-medium">
                     {isPlaying 
                         ? 'Playing...' 
                         : song.preview_url
