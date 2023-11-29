@@ -13,7 +13,7 @@ export default async function MusicChart() {
     return (
         <div className="w-full md:col-span-4">
             <h2 className={`${montserrat.className} mb-1 md:text-xl`}>
-                Try out todays recommendations...
+                Try out new recommendations...
             </h2>
             <div className="rounded-xl bg-yellow-50 p-4">
                 {songs?.filter((song) => song.preview_url).slice(0, 4).map((song) => (

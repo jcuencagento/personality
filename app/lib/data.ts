@@ -195,42 +195,6 @@ export async function fetchCustomers() {
   }
 }
 
-/*
-export async function fetchFilteredCustomers(query: string) {
-  noStore();
-  try {
-    const data = await sql<CustomersTable>`
-		SELECT
-		  customers.id,
-		  customers.name,
-		  customers.email,
-		  customers.image_url,
-		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
-		FROM customers
-		LEFT JOIN invoices ON customers.id = invoices.customer_id
-		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
-		GROUP BY customers.id, customers.name, customers.email, customers.image_url
-		ORDER BY customers.name ASC
-	  `;
-
-    const customers = data.rows.map((customer) => ({
-      ...customer,
-      total_pending: formatCurrency(customer.total_pending),
-      total_paid: formatCurrency(customer.total_paid),
-    }));
-
-    return customers;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
-  }
-}
-*/
-
 export async function getUser(email: string) {
   try {
     const user = await sql`SELECT * from USERS where email=${email}`;
@@ -293,7 +257,7 @@ async function getAccessToken() {
     const basicAuth = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
     const requestBody = new URLSearchParams();
     requestBody.append('grant_type', 'client_credentials');
-    requestBody.append('scope', 'user-read-private user-read-email user-library-read');
+    requestBody.append('scope', 'user-library-read');
     const tokenEndpoint = 'https://accounts.spotify.com/api/token';
 
     try {
@@ -311,7 +275,6 @@ async function getAccessToken() {
         }
 
         const data = await response.json();
-        console.log({ data });
         const now_object = { now: Date.now() };
         return { ...data, ...now_object };
     } catch (error) {
@@ -324,10 +287,14 @@ type Record = {
     [playerName: string]: string;
 };
 
+/* Every time you add a URL you need to ask for new access token -> change scope */
 const recommendationsURLs: Record = {
-    nirvana_rock_metal_punk_rap: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap',
+    nirvana_rock_metal_punk_rap: 'https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rock%2Cpunk%2Cmetal%2Crap',
+    nirvana_pop_metal_reggae: 'https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=pop%2Creggae%2Cmetal',
     blink_metal_pop: 'https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_artists=6FBDaR13swtiWwGhX1WQsP&seed_genres=metal%2Cpop',
-    //nirvana_rap_metal_punk: 'https://api.spotify.com/v1/recommendations?limit=8&market=ES&seed_artists=6olE6TJLqED3rqDCT0FyPh&seed_genres=rap%2Cpunk%2Cmetal'
+    blink_rap_reggae_country: 'https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_artists=6FBDaR13swtiWwGhX1WQsP&seed_genres=rap%2Creggae%2Ccountry',
+    evaristo_rap_reggae_country: 'https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_artists=3vHlZN6pTa2zOl2eVxiEdJ&seed_genres=rap%2Creggae%2Ccountry',
+    evaristo_rock_pop_metal: 'https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_artists=3vHlZN6pTa2zOl2eVxiEdJ&seed_genres=rock%2Cpop%2Cmetal'
 };
 
 async function getSongs(token: Token | null) {
@@ -335,7 +302,6 @@ async function getSongs(token: Token | null) {
     const randomKeyIndex = Math.floor(Math.random() * keys.length);
     const randomKey = keys[randomKeyIndex];
     const apiUrl = recommendationsURLs[randomKey];
-    console.log(apiUrl);
     try {
         const response = await fetch(apiUrl, {
             headers: {
@@ -352,7 +318,6 @@ async function getSongs(token: Token | null) {
         const songs = data.tracks;
         return songs;
     } catch (error) {
-        console.log(error);
         console.error('Error fetching songs:', error);
         return [];
     }
@@ -368,10 +333,9 @@ type Token = {
 let access_token_object: Token | null;
 export async function fetchSongs() {
     if (!access_token_object || isTokenExpired(access_token_object)) {
-        access_token_object = await getAccessToken(); // Retrieve a new access token
+        access_token_object = await getAccessToken();
     }
 
-    console.log(access_token_object);
     try {
         const songs = await getSongs(access_token_object);
         return songs;
@@ -379,7 +343,6 @@ export async function fetchSongs() {
         console.error('Error fetching songs:', error);
     }
 }
-
 
 function isTokenExpired(token: Token) {
     if (!token) {
@@ -391,9 +354,6 @@ function isTokenExpired(token: Token) {
     }
 
     const expiration_time = token.now + token.expires_in;
-    console.log('Expiration time', expiration_time);
-    console.log('Date now', Date.now());
-    console.log(expiration_time < Date.now());
     return expiration_time < Date.now();
 }
 
