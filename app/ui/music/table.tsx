@@ -1,18 +1,18 @@
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
-import { Song } from '@/app/lib/definitions';
+import { MySong } from '@/app/lib/definitions';
 import SongComponent from './song-component';
 
 export default async function SongsTable({
     songs,
 }: {
-    songs: Song[];
+    songs: MySong[];
 }) {
     return (
         <div className="w-full">
         <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
-            Songs!
+            My 2023 Spotify recommendations!
         </h1>
         <Search placeholder="Search songs..." />
         <div className="mt-6 flow-root">
@@ -22,7 +22,7 @@ export default async function SongsTable({
                 <div className="md:hidden">
                     {songs?.map((song) => (
                     <div
-                        key={song.id}
+                        key={song.track.id}
                         className="mb-2 w-full rounded-md bg-white p-4"
                     >
                         <div className="flex items-center justify-between border-b pb-4">
@@ -30,17 +30,17 @@ export default async function SongsTable({
                             <div className="mb-2 flex items-center">
                             <div className="flex items-center gap-3">
                                 <Image
-                                    src={song.album.images[0].url}
-                                    alt={`${song.name}'s picture`}
+                                    src={song.track.album.images[0].url}
+                                    alt={`${song.track.name}'s picture`}
                                     width={80}
                                     height={80}
                                 />
-                                <p>{song.name}</p>
+                                <p>{song.track.name}</p>
                             </div>
                             </div>
                             <p className="text-sm text-gray-500">
-                                <a href={song.artists[0].external_urls.spotify} target="_blank" rel="noopener noreferrer">
-                                    {song.artists[0].name}
+                                <a href={song.track.artists[0].external_urls.spotify} target="_blank" rel="noopener noreferrer">
+                                    {song.track.artists[0].name}
                                 </a>
                             </p>
                         </div>
@@ -48,17 +48,17 @@ export default async function SongsTable({
                         <div className="flex w-full items-center justify-between border-b py-5">
                         <div className="flex w-1/2 flex-col">
                             <p className="text-xs">Album</p>
-                            <a href={song.album.external_urls.spotify} target="_blank" rel="noopener noreferrer">
-                                <p className="font-big">{song.album.name}</p>
+                            <a href={song.track.album.external_urls.spotify} target="_blank" rel="noopener noreferrer">
+                                <p className="font-big">{song.track.album.name}</p>
                             </a>
                         </div>
                         <div className="flex w-1/2 flex-col">
                             <p className="text-xs">Popularity</p>
-                            <p className="font-big">{song.popularity}</p>
+                            <p className="font-big">{song.track.popularity}</p>
                         </div>
                         </div>
                         <div className="pt-4 text-sm">
-                        <p>Explicit {song.explicit}</p>
+                        <p>Explicit {song.track.explicit}</p>
                         </div>
                     </div>
                     ))}
@@ -86,25 +86,25 @@ export default async function SongsTable({
 
                     <tbody className="divide-y divide-gray-200 text-gray-900">
                     {songs?.map((song) => (
-                        <tr key={song.id} className="group">
+                        <tr key={song.track.id} className="group">
                         <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
-                            <SongComponent song={song} />
+                            <SongComponent song={song.track} />
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                            <a href={song.artists[0].external_urls.spotify} target="_blank" rel="noopener noreferrer">
-                                <p className="font-bold text-lg">{song.artists[0].name}</p>
+                            <a href={song.track.artists[0].external_urls.spotify} target="_blank" rel="noopener noreferrer">
+                                <p className="font-bold text-lg">{song.track.artists[0].name}</p>
                             </a>
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                            <a href={song.album.external_urls.spotify} target="_blank" rel="noopener noreferrer">
-                                <p className="font-bold text-lg">{song.album.name}</p>
+                            <a href={song.track.album.external_urls.spotify} target="_blank" rel="noopener noreferrer">
+                                <p className="font-bold text-lg">{song.track.album.name}</p>
                             </a>
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                            <p className="font-bold text-lg">{song.popularity} <span role="img" aria-label="star">⭐</span></p>
+                            <p className="font-bold text-lg">{song.track.popularity} <span role="img" aria-label="star">⭐</span></p>
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                            <p className="font-bold text-lg">{song.explicit ? <span role="img" aria-label="no">🔞</span> : <span role="img" aria-label="ok">🆗</span>}</p>
+                            <p className="font-bold text-lg">{song.track.explicit ? <span role="img" aria-label="no">🔞</span> : <span role="img" aria-label="ok">🆗</span>}</p>
                         </td>
                         </tr>
                     ))}

@@ -257,7 +257,7 @@ async function getAccessToken() {
     const basicAuth = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
     const requestBody = new URLSearchParams();
     requestBody.append('grant_type', 'client_credentials');
-    requestBody.append('scope', 'user-library-read');
+    requestBody.append('scope', 'user-library-read playlist-read-private user-library-read');
     const tokenEndpoint = 'https://accounts.spotify.com/api/token';
 
     try {
@@ -283,6 +283,39 @@ async function getAccessToken() {
     }
 }
 
+async function refreshTokenFunction(refreshToken: string | null) {
+  const client_id = process.env.SPOTIFY_CLIENT_ID;
+  const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+  const tokenEndpoint = 'https://accounts.spotify.com/api/token';
+
+  const requestBody = new URLSearchParams();
+  requestBody.append('grant_type', 'refresh_token');
+  requestBody.append('refresh_token', refreshToken || 'error...');
+
+  const basicAuth = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
+
+  try {
+      const response = await fetch(tokenEndpoint, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${basicAuth}`,
+          },
+          body: requestBody.toString(),
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to refresh access token');
+      }
+
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('Error refreshing access token:', error);
+      throw error; // Propagate the error to handle it where refreshTokenFunction() is called
+  }
+}
+
 type Record = {
     [playerName: string]: string;
 };
@@ -302,6 +335,7 @@ async function getSongs(token: Token | null) {
     const randomKeyIndex = Math.floor(Math.random() * keys.length);
     const randomKey = keys[randomKeyIndex];
     const apiUrl = recommendationsURLs[randomKey];
+    console.log(apiUrl);
     try {
         const response = await fetch(apiUrl, {
             headers: {
@@ -317,6 +351,29 @@ async function getSongs(token: Token | null) {
         const data = await response.json();
         const songs = data.tracks;
         return songs;
+    } catch (error) {
+        console.error('Error fetching songs:', error);
+        return [];
+    }
+}
+
+async function getMySongs(token: Token | null) {
+    const apiUrl = 'https://api.spotify.com/v1/playlists/536YjoAObZRmpu4FEjUoHs';
+    try {
+        const response = await fetch(apiUrl, {
+            headers: {
+                Authorization: `Bearer ${token?.access_token}`
+            }
+        });
+
+        if (!response.ok) {
+            console.log({ response });
+            throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        const my_songs = data.tracks.items;
+        return my_songs;
     } catch (error) {
         console.error('Error fetching songs:', error);
         return [];
@@ -340,7 +397,36 @@ export async function fetchSongs() {
         const songs = await getSongs(access_token_object);
         return songs;
     } catch (error) {
-        console.error('Error fetching songs:', error);
+        console.log(error);
+        access_token_object = await refreshTokenFunction(access_token_object?.access_token || null);
+
+        try {
+            const songs = await getSongs(access_token_object);
+            return songs;
+        } catch (error) {
+            console.error('Error fetching songs:', error);
+        }
+    }
+}
+
+export async function fetchMySongs() {
+    if (!access_token_object || isTokenExpired(access_token_object)) {
+        access_token_object = await getAccessToken();
+    }
+
+    try {
+        const songs = await getMySongs(access_token_object);
+        return songs;
+    } catch (error) {
+        console.log(error);
+        access_token_object = await refreshTokenFunction(access_token_object?.access_token || null);
+
+        try {
+            const songs = await getMySongs(access_token_object);
+            return songs;
+        } catch (error) {
+            console.error('Error fetching songs:', error);
+        }
     }
 }
 

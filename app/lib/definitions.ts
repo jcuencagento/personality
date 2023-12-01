@@ -31,6 +31,10 @@ export type Film = {
 
 
 /*  Spotify */
+export type MySong = {
+    track: Song
+};
+
 export type Song = {
   id: string;
   name: string;
