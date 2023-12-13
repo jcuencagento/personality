@@ -26,6 +26,7 @@
 }
   
 .player-card-dash:hover {
+    border: 3px solid rgb(255, 209, 57);
     transform: scale(1.03);
 }
   

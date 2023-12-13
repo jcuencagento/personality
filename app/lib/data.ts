@@ -209,7 +209,6 @@ export async function getFilms(query: any) {
     const apiKey = '8d30a0b229ea5c741cccef3304393f72';
     const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&sort_by=vote_average.desc&vote_count.gte=1000&language=en-US&page=1&include_adult=false&include_video=false`;
     https://api.themoviedb.org/3/account/20706337/watchlist/movies?language=en-US&page=1&sort_by=created_at.asc
-    console.log(query); //Not used yet
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -228,7 +227,7 @@ export async function getFilms(query: any) {
 }
 
 export async function getToWatch() {
-    const apiUrl = `https://api.themoviedb.org/3/account/20706337/watchlist/movies?language=en-US&page=1&sort_by=created_at.desc`;
+    const apiUrl = `https://api.themoviedb.org/3/account/20706337/watchlist/movies?language=en-US&page=1&sort_by=created_at.desc&date=${new Date()}`;
     try {
         const response = await fetch(apiUrl, {
             method: 'GET',
@@ -242,7 +241,7 @@ export async function getToWatch() {
         }
 
         const data = await response.json();
-        const films = data.results.slice(0, 4); // Get the 4 films TO WATCH
+        const films = data.results.slice(0, 4); // Get the next 4 films TO WATCH
         return films;
     } catch (error) {
         console.error('Error fetching films:', error);
@@ -335,6 +334,7 @@ async function getSongs(token: Token | null) {
     const randomKeyIndex = Math.floor(Math.random() * keys.length);
     const randomKey = keys[randomKeyIndex];
     const apiUrl = recommendationsURLs[randomKey];
+    console.log(randomKey);
     console.log(apiUrl);
     try {
         const response = await fetch(apiUrl, {
@@ -344,7 +344,6 @@ async function getSongs(token: Token | null) {
         });
 
         if (!response.ok) {
-            console.log({ response });
             throw new Error('Failed to fetch data');
         }
 
@@ -367,7 +366,6 @@ async function getMySongs(token: Token | null) {
         });
 
         if (!response.ok) {
-            console.log({ response });
             throw new Error('Failed to fetch data');
         }
 
@@ -460,15 +458,18 @@ const playerURLs: PlayerURLDictionary = {
     tatum: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=434',
     durant: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=140',
     steph: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=115',
+    mathurin: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=38017686',
+    toppin: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547243',
+    wembanyama: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=56677822',
     // Add more players and their URLs here
 };
 
 export async function fetchAverages(player: string) {
     const URL = playerURLs[player] 
-        ? playerURLs[player] 
+        ? playerURLs[player]
         : 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=304' // TJ xd
     try {
-        const response = await fetch(URL, {
+        const response = await fetch(`${URL}?date=${new Date()}`, {
             method: 'GET'
         });
         

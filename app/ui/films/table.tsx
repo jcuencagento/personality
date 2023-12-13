@@ -43,7 +43,9 @@ export default async function FilmsTable({
                         </div>
                         </div>
                         <div className="pt-4 text-sm">
-                        <p>{film.vote_average} over 10</p>
+                            <p className="font-bold text-lg">
+                                {Math.round(parseFloat(film.vote_average) * 10) / 10}<span role="img" aria-label="star">⭐</span>
+                            </p>
                         </div>
                     </div>
                     ))}
@@ -81,7 +83,9 @@ export default async function FilmsTable({
                             <p className="font-bold text-lg">{film.release_date}</p>
                         </td>
                         <td className="whitespace-nowrap bg-white px-8 py-8 text-big group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                            <p className="font-bold text-lg">{film.vote_average} <span role="img" aria-label="star">⭐</span></p>
+                            <p className="font-bold text-lg">
+                                {Math.round(parseFloat(film.vote_average) * 10) / 10}<span role="img" aria-label="star">⭐</span>
+                            </p>
                         </td>
                         </tr>
                     ))}

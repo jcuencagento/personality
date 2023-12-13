@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 export default async function Page({ params }: { params: { player: string } }) {
     const player = params.player;
     const averages = await fetchAverages(player);
-    console.log(averages);
 
     if (!averages) {
         notFound();
@@ -21,8 +20,8 @@ export default async function Page({ params }: { params: { player: string } }) {
      return (
         <div className="player-page">
             <div className='flex items-center gap-3'>
-                <Link key={`${player}-home`} href="/dashboard" className="home-button">Go home...</Link>
-                <Link key={`${player}-players`} href="/dashboard/sports" className="players-button">NBA players...</Link>
+                <Link key={`${player}-home`} href="/dashboard" className="home-button">Go home</Link>
+                <Link key={`${player}-players`} href="/dashboard/sports" className="players-button">NBA players</Link>
             </div>
             <div className="card">
                 <div className="player-info">
@@ -30,8 +29,8 @@ export default async function Page({ params }: { params: { player: string } }) {
                     <Image 
                         src={`/players/${player}.jpg`}
                         alt={player}
-                        width={1000}
-                        height={1000}
+                        width={2000}
+                        height={2000}
                         quality={100}
                         className="player-image-personal"
                     />
@@ -41,8 +40,7 @@ export default async function Page({ params }: { params: { player: string } }) {
                     <p>Points per game: {averages.pts}</p>
                     <p>Assists per game: {averages.ast}</p>
                     <p>Rebounds per game: {averages.reb}</p>
-                    <p>Steals per game: {averages.stl}</p>
-                    <p>Blocks per game: {averages.blk}</p>
+                    <p>Stocks per game: {Math.round((averages.stl + averages.blk) * 10) / 10}</p>
                 </div>
             </div>
         </div>

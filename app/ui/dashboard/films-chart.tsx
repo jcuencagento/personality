@@ -30,7 +30,9 @@ export default async function FilmsChart() {
                             />
                             <div>
                                 <p className="font-bold text-lg">{film.title}</p>
-                                <p>{film.vote_average} <span role="img" aria-label="star">⭐</span></p>
+                                <p>
+                                    {Math.round(parseFloat(film.vote_average) * 10) / 10}<span role="img" aria-label="star">⭐</span>
+                                </p>
                             </div>
                         </div>
                     </div>
