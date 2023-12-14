@@ -48,11 +48,36 @@
 
 .player-stats {
     font-size: 1.5vw;
-    margin-top: 2vw;
+    margin-top: 1vw;
     margin-bottom: 5vw;
     height: 25vw;
+    width: 30vw;
     text-align: center;
 }
+
+.stat {
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+    margin: 0.5vw;
+    background-color: #555;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    opacity: 50%;
+    border-radius: 2%;
+}
+
+.stat-label {
+    color: white;
+    font-weight: normal;
+    opacity: 100%;
+}
+
+.stat-value {
+    color: white;
+    font-weight: bolder;
+    opacity: 100%;
+}
+
 
 .home-button,
 .players-button {
@@ -78,7 +103,7 @@
 .card:hover {
     border-color: rgb(255, 209, 57);
     background: linear-gradient(to top left, rgba(255, 209, 57, 0.5), rgba(255, 209, 57, 0.3), rgba(248, 229, 166, 0.2));
-    transform: scale(1.005) rotate(-1deg); /* Slight tilt effect */
+    transform: scale(1.01); /* Slight tilt effect */
 }
 
 /* Global Sports page */
@@ -132,7 +157,7 @@
 
 .player-card:hover {
     border: 3px solid rgb(255, 209, 57);
-    transform: scale(1.02) rotate(-1deg);;
+    transform: scale(1.02) rotate(-1deg);
 }
 
 .player-card:hover .player-image {

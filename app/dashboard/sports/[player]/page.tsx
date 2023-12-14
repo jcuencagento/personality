@@ -36,11 +36,29 @@ export default async function Page({ params }: { params: { player: string } }) {
                     />
                 </div>
                 <div className="player-stats">
-                    <p>With {averages.games_played} games played</p>
-                    <p>Points per game: {averages.pts}</p>
-                    <p>Assists per game: {averages.ast}</p>
-                    <p>Rebounds per game: {averages.reb}</p>
-                    <p>Stocks per game: {Math.round((averages.stl + averages.blk) * 10) / 10}</p>
+                    <span className="stat-value">With {averages.games_played} games played</span>
+
+                    <div className="stat">
+                        <span className="stat-label">Points per game:</span>
+                        <span className="stat-value">{averages.pts}</span>
+                    </div>
+
+                    <div className="stat">
+                        <span className="stat-label">Assists per game:</span>
+                        <span className="stat-value">{averages.ast}</span>
+                    </div>
+
+                    <div className="stat">
+                        <span className="stat-label">Rebounds per game:</span>
+                        <span className="stat-value">{averages.reb}</span>
+                    </div>
+
+                    <div className="stat">
+                        <span className="stat-label">Stocks per game:</span>
+                        <span className="stat-value">
+                            {Math.round((averages.stl + averages.blk) * 10) / 10}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
