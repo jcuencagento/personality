@@ -19,8 +19,8 @@ export default async function MusicChart() {
                 {songs?.filter((song) => song.preview_url).slice(0, 4).map((song) => (
                     <div
                         key={song.id}
-                        className="mb-2 w-full rounded-md text-black bg-gray-500 p-4">
-                        <SongComponent song={song} />
+                        className="mb-2 w-full rounded-md text-black bg-gray-500 p-2">
+                        <SongComponent song={song} chart={true} />
                     </div>
                 ))}
             </div>

@@ -6,7 +6,7 @@ import SongComponent from './song-component';
 
 export default async function SongsTable({
     songs,
-}: {
+} : {
     songs: MySong[];
 }) {
     return (
@@ -88,7 +88,7 @@ export default async function SongsTable({
                     {songs?.map((song) => (
                         <tr key={song.track.id} className="group">
                         <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
-                            <SongComponent song={song.track} />
+                            <SongComponent song={song.track}  chart={false}/>
                         </td>
                         <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                             <a href={song.track.artists[0].external_urls.spotify} target="_blank" rel="noopener noreferrer">
