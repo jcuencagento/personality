@@ -208,7 +208,7 @@ export async function getUser(email: string) {
 export async function getFilms(query: any) {
     const apiKey = '8d30a0b229ea5c741cccef3304393f72';
     const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&sort_by=vote_average.desc&vote_count.gte=1000&language=en-US&page=1&include_adult=false&include_video=false`;
-    https://api.themoviedb.org/3/account/20706337/watchlist/movies?language=en-US&page=1&sort_by=created_at.asc
+    //console.log('https://api.themoviedb.org/3/account/20706337/watchlist/movies?language=en-US&page=1&sort_by=created_at.asc');
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -216,9 +216,7 @@ export async function getFilms(query: any) {
         }
 
         const data = await response.json();
-        const films = data.results.slice(0, 10); // Get the top 10 films
-
-        //console.log(films);
+        const films = data.results.slice(0, 15); // Get the top 15 films
         return films;
     } catch (error) {
         console.error('Error fetching films:', error);
@@ -334,6 +332,7 @@ async function getSongs(token: Token | null) {
     const randomKeyIndex = Math.floor(Math.random() * keys.length);
     const randomKey = keys[randomKeyIndex];
     const apiUrl = recommendationsURLs[randomKey];
+    console.log(token?.access_token);
     console.log(randomKey);
     console.log(apiUrl);
     try {
@@ -395,9 +394,8 @@ export async function fetchSongs() {
         const songs = await getSongs(access_token_object);
         return songs;
     } catch (error) {
-        console.log(error);
+        console.log('Error in getSongs:', error);
         access_token_object = await refreshTokenFunction(access_token_object?.access_token || null);
-
         try {
             const songs = await getSongs(access_token_object);
             return songs;
@@ -457,6 +455,7 @@ const playerURLs: PlayerURLDictionary = {
     jokic: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=246',
     tatum: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=434',
     durant: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=140',
+    luka: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=132',
     steph: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=115',
     mathurin: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=38017686',
     toppin: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547243',

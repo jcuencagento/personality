@@ -14,6 +14,7 @@ export default function Page({ }: { }) {
         { name: 'tatum' },
         { name: 'toppin' },
         { name: 'george' },
+        { name: 'luka' },
         { name: 'antetokounmpo' },
         { name: 'wembanyama' },
         { name: 'durant' },
