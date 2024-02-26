@@ -442,37 +442,41 @@ function isTokenExpired(token: Token) {
 type PlayerURLDictionary = {
     [playerName: string]: string;
 };
-  
+
 const playerURLs: PlayerURLDictionary = {
-    haliburton: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547245',
-    turner: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=452',
-    lebron: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=237',
-    ant: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547238',
-    shai: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=175',
-    nesmith: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547250',
-    antetokounmpo: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=15',
-    george: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=172',
-    jokic: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=246',
-    tatum: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=434',
-    durant: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=140',
-    luka: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=132',
-    steph: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=115',
-    mathurin: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=38017686',
-    toppin: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=3547243',
-    wembanyama: 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=56677822',
+    haliburton: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=3547245',
+    turner: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=452',
+    lebron: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=237',
+    ant: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=3547238',
+    shai: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=175',
+    nesmith: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=3547250',
+    antetokounmpo: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=15',
+    george: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=172',
+    jokic: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=246',
+    tatum: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=434',
+    durant: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=140',
+    luka: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=132',
+    steph: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=115',
+    mathurin: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=38017686',
+    toppin: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=3547243',
+    wembanyama: 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=56677822',
     // Add more players and their URLs here
 };
 
 export async function fetchAverages(player: string) {
-    const URL = playerURLs[player] 
+    const URL = playerURLs[player]
         ? playerURLs[player]
-        : 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=304' // TJ xd
+        : 'https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]=304' // TJ xd
     try {
-        const response = await fetch(`${URL}?date=${new Date()}`, {
-            method: 'GET'
+        const response = await fetch(URL, {
+            method: 'GET',
+            headers: {
+                "Authorization": process.env.BALL_DONT_LIE || ""
+            }
         });
-        
+
         if (!response.ok) {
+            console.log(response);
             throw new Error('Failed to fetch data');
         }
 

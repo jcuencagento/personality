@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { player: string } }) {
             <div className="card">
                 <div className="player-info">
                     <p className="player-name">{player}</p>
-                    <Image 
+                    <Image
                         src={`/players/${player}.jpg`}
                         alt={player}
                         width={2000}
@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { player: string } }) {
                     <div className="stat">
                         <span className="stat-label">Stocks per game:</span>
                         <span className="stat-value">
-                            {Math.round((averages.stl + averages.blk) * 10) / 10}
+                            {Math.round(parseFloat(averages.stl ?? 0.01 + averages.blk ?? 0.01) * 10) / 10}
                         </span>
                     </div>
                 </div>
