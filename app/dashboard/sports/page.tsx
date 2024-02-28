@@ -23,22 +23,25 @@ export default function Page({ }: { }) {
     ];
 
     return (
-        <div className="sports-page overflow-scroll">
-            {players.map((player, index) => (
-                <Link key={index} href={`/dashboard/sports/${player.name}`}>
-                <div className="player-card" >
-                    <Image
-                        src={`/players/${player.name}.jpg`}
-                        alt={player.name}
-                        width={1000}
-                        height={1000}
-                        quality={100}
-                        className="player-image"
-                    />
-                    <div className="player-overlay">{player.name}</div>
-                </div>
-                </Link>
-            ))}
-        </div>
+        <>
+            <h2 style={{ marginBottom: '2%' }}>NBA people</h2>
+            <div className="sports-page overflow-scroll">
+                {players.map((player, index) => (
+                    <Link key={index} href={`/dashboard/sports/${player.name}`}>
+                    <div className="player-card" >
+                        <Image
+                            src={`/players/${player.name}.jpg`}
+                            alt={player.name}
+                            width={1000}
+                            height={1000}
+                            quality={100}
+                            className="player-image"
+                        />
+                        <div className="player-overlay">{player.name}</div>
+                    </div>
+                    </Link>
+                ))}
+            </div>
+        </>
     );
 }

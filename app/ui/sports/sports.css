@@ -78,6 +78,43 @@
     opacity: 100%;
 }
 
+@media only screen and (max-width: 600px) {
+    .card {
+        width: 75vw;
+        height: 110vw;
+        border-radius: 20px;
+    }
+
+    .player-info {
+        padding-left: 10%;
+        padding-right: 10%;
+        width: 90%;
+        height: 50vw;
+        text-align: center;
+    }
+
+    .player-image-personal {
+        max-height: 40vw;
+        border-radius: 10px;
+    }
+
+    .player-name {
+        font-size: 5vw;
+    }
+
+    .player-stats {
+        font-size: 3.5vw;
+        margin-top: 2vw;
+        margin-bottom: 3vw;
+        height: 50vw;
+        width: 60vw;
+    }
+
+    .stat {
+        gap: 2.5vw;
+        margin: 1vw;
+    }
+}
 
 .home-button,
 .players-button {
@@ -92,6 +129,15 @@
     transition: background-color 0.3s ease;
     border: none;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+    .home-button,
+    .players-button {
+        padding: 1% 10px;
+        font-size: small;
+        margin-bottom: 10%;
+    }
 }
 
 .home-button:hover,
@@ -117,7 +163,7 @@
     height: 100%;
     overflow: auto;
 }
-  
+
 .player-card {
     position: relative;
     width: 23vh;
@@ -163,8 +209,7 @@
 .player-card:hover .player-image {
     opacity: 0.25;
 }
-  
+
 .player-card:hover .player-overlay {
     opacity: 0.75;
 }
-  

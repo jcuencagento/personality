@@ -11,7 +11,7 @@ export default async function NBAWrapper() {
     ];
 
     return (
-        <div className="player-grid-dash">
+        <div className="player-grid-dash w-full">
             {fav_players.map((player, index) => (
                 <Link key={index} href={`/dashboard/sports/${player.name}`}>
                 <div className="player-card-dash" >
